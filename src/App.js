@@ -115,11 +115,14 @@ const App = () => {
           background: 'rgba(255, 255, 255, 0.8)',
           backdropFilter: 'blur(10px)',
           boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-          padding: '20px'
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch'
         }}
       >
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Input
               type="number"
               value={paperWidth}
@@ -128,7 +131,7 @@ const App = () => {
               style={{ marginBottom: '10px' }}
             />
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Input
               type="number"
               value={paperHeight}
@@ -139,7 +142,7 @@ const App = () => {
           </Col>
         </Row>
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Input
               type="number"
               value={cutWidth}
@@ -148,7 +151,7 @@ const App = () => {
               style={{ marginBottom: '10px' }}
             />
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Input
               type="number"
               value={cutHeight}
@@ -158,7 +161,7 @@ const App = () => {
             />
           </Col>
         </Row>
-        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+        <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
           <Button type="primary" onClick={drawPlan} style={{ marginRight: '10px' }}>
             Gerar Plano de Corte
           </Button>
