@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Button, Input, Row, Col } from 'antd';
 import 'antd/dist/reset.css'; // Importa o CSS do Ant Design
-import './App.css'; // Seu CSS personalizado
+import './App.css'; // Importa o CSS Personalizado
 import { jsPDF } from 'jspdf';
 
 const App = () => {
