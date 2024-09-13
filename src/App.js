@@ -86,7 +86,7 @@ const App = () => {
     // Adiciona o total de folhas e o total após corte
     pdf.setFontSize(10);
     pdf.text(`Total de Folhas: ${paperQuantity}`, centerX, 15);
-    pdf.text(`Total após corte: ${totalCuts * paperQuantity}`, centerX, 20);
+    pdf.text(`Total Após Corte: ${totalCuts * paperQuantity}`, centerX, 20);
 
     // Desenha os cortes
     pdf.setDrawColor(0, 0, 0); // Preto para as linhas de corte
