@@ -11,6 +11,9 @@ const App = () => {
   const [cutHeight, setCutHeight] = useState(33);
   const [paperQuantity, setPaperQuantity] = useState(1);
 
+  // Defina a escala do Canvas aqui
+  const scale = 0.7; // Altere este valor para ajustar a escala de visualização do Canvas
+
   const calculateCuts = () => {
     const rows = Math.floor(paperHeight / cutHeight);
     const cols = Math.floor(paperWidth / cutWidth);
@@ -118,88 +121,98 @@ const App = () => {
   };
 
   return (
-    <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <h1 style={{ textAlign: 'center' }}>Plano de Corte</h1>
-      <Card
-        style={{
-          width: '100%',
-          maxWidth: '600px',
-          borderRadius: '15px',
-          background: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(10px)',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'stretch'
-        }}
-      >
-        <Row gutter={16}>
-          <Col xs={24} sm={12}>
-            <Input
-              type="number"
-              value={paperWidth}
-              onChange={(e) => setPaperWidth(Number(e.target.value))}
-              addonBefore="Papel - Largura:"
-              style={{ marginBottom: '10px' }}
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <Input
-              type="number"
-              value={paperHeight}
-              onChange={(e) => setPaperHeight(Number(e.target.value))}
-              addonBefore="Papel - Altura:"
-              style={{ marginBottom: '10px' }}
-            />
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col xs={24} sm={12}>
-            <Input
-              type="number"
-              value={cutWidth}
-              onChange={(e) => setCutWidth(Number(e.target.value))}
-              addonBefore="Corte - Largura:"
-              style={{ marginBottom: '10px' }}
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <Input
-              type="number"
-              value={cutHeight}
-              onChange={(e) => setCutHeight(Number(e.target.value))}
-              addonBefore="Corte - Altura:"
-              style={{ marginBottom: '10px' }}
-            />
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col xs={24} sm={12}>
-            <Input
-              type="number"
-              value={paperQuantity}
-              onChange={(e) => setPaperQuantity(Number(e.target.value))}
-              addonBefore="Qtd. de Folhas:"
-              style={{ marginBottom: '10px' }}
-            />
-          </Col>
-        </Row>
-        <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
-          <Button type="primary" onClick={drawPlan} style={{ marginRight: '10px' }}>
-            Gerar Plano de Corte
-          </Button>
-          <Button type="default" onClick={generatePDF}>
-            Exportar como PDF
-          </Button>
-        </div>
-      </Card>
-      <canvas
-        id="planCanvas"
-        width={paperWidth * 10}
-        height={paperHeight * 10}
-        style={{ border: '1px solid black', marginTop: '20px', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
-      ></canvas>
+    <div style={{ padding: '20px', display: 'flex', height: '100vh' }}>
+      {/* Coluna da esquerda com o Card */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <Card
+          style={{
+            width: '100%',
+            maxWidth: '600px',
+            borderRadius: '15px',
+            background: 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+            padding: '20px',
+            marginBottom: '20px' // Espaço entre o Card e o Canvas
+          }}
+        >
+          <h1 style={{ textAlign: 'center' }}>Plano de Corte</h1>
+          <Row gutter={16}>
+            <Col xs={24} sm={12}>
+              <Input
+                type="number"
+                value={paperWidth}
+                onChange={(e) => setPaperWidth(Number(e.target.value))}
+                addonBefore="Papel - Largura:"
+                style={{ marginBottom: '10px' }}
+              />
+            </Col>
+            <Col xs={24} sm={12}>
+              <Input
+                type="number"
+                value={paperHeight}
+                onChange={(e) => setPaperHeight(Number(e.target.value))}
+                addonBefore="Papel - Altura:"
+                style={{ marginBottom: '10px' }}
+              />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col xs={24} sm={12}>
+              <Input
+                type="number"
+                value={cutWidth}
+                onChange={(e) => setCutWidth(Number(e.target.value))}
+                addonBefore="Corte - Largura:"
+                style={{ marginBottom: '10px' }}
+              />
+            </Col>
+            <Col xs={24} sm={12}>
+              <Input
+                type="number"
+                value={cutHeight}
+                onChange={(e) => setCutHeight(Number(e.target.value))}
+                addonBefore="Corte - Altura:"
+                style={{ marginBottom: '10px' }}
+              />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col xs={24} sm={12}>
+              <Input
+                type="number"
+                value={paperQuantity}
+                onChange={(e) => setPaperQuantity(Number(e.target.value))}
+                addonBefore="Qtd. de Folhas:"
+                style={{ marginBottom: '10px' }}
+              />
+            </Col>
+          </Row>
+          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+            <Button type="primary" onClick={drawPlan} style={{ marginRight: '10px' }}>
+              Gerar Plano de Corte
+            </Button>
+            <Button type="default" onClick={generatePDF}>
+              Exportar como PDF
+            </Button>
+          </div>
+        </Card>
+      </div>
+
+      {/* Coluna da direita com o Canvas */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <canvas
+          id="planCanvas"
+          width={paperWidth * 10}
+          height={paperHeight * 10}
+          style={{ 
+            
+            display: 'block', 
+            transform: `scale(${scale})`, // Aplica a escala aqui
+            transformOrigin: 'center' // Origem da transformação
+          }} 
+        ></canvas>
+      </div>
     </div>
   );
 };
