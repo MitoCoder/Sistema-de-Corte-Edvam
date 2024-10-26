@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { Card, Button, Input, Row, Col } from 'antd';
+import { Card, Button, Input, Row, Col, Select } from 'antd';
 import 'antd/dist/reset.css'; // Importa o CSS do Ant Design
 import './App.css'; // Importa o CSS Personalizado
 import { jsPDF } from 'jspdf';
 
+const { Option } = Select;
+
 const App = () => {
   const [paperWidth, setPaperWidth] = useState(66);
   const [paperHeight, setPaperHeight] = useState(96);
-  const [cutWidth, setCutWidth] = useState(66);
-  const [cutHeight, setCutHeight] = useState(33);
+  const [cutWidth, setCutWidth] = useState(12);
+  const [cutHeight, setCutHeight] = useState(12);
   const [paperQuantity, setPaperQuantity] = useState(1);
-
-  // Defina a escala do Canvas aqui
-  const scale = 0.7; // Altere este valor para ajustar a escala de visualização do Canvas
+  const [multiplo, setMultiplo] = useState(2);
+  const [material, setMaterial] = useState();
+  const [gramatura, setGramatura] = useState(0);
+  const [totals, setTotals] = useState({ totalCuts: 0, totalProducts: 0 });
 
   const calculateCuts = () => {
     const rows = Math.floor(paperHeight / cutHeight);
@@ -24,6 +27,12 @@ const App = () => {
     const leftoverHeight = paperHeight - totalCutHeight;
 
     return { rows, cols, leftoverWidth, leftoverHeight, totalCuts: rows * cols };
+  };
+
+  const updateTotals = () => {
+    const { totalCuts } = calculateCuts();
+    const totalProducts = totalCuts * paperQuantity * multiplo;
+    setTotals({ totalCuts, totalProducts });
   };
 
   const drawPlan = () => {
@@ -52,7 +61,7 @@ const App = () => {
     }
 
     ctx.font = '14px Arial';
-    ctx.fillText(`Papel: ${paperWidth}x${paperHeight}`, 10, paperHeight * 10 - 10);
+    ctx.fillText(`${paperWidth}x${paperHeight}`, 10, paperHeight * 10 - 10);
 
     ctx.strokeStyle = 'darkred'; // Cor vermelha escura para as linhas da sobra
     ctx.lineWidth = 2; // Linha mais grossa para a sobra
@@ -84,12 +93,13 @@ const App = () => {
 
     // Adiciona o título do PDF
     pdf.setFontSize(13);
-    pdf.text(`Plano de Corte - Papel: ${paperWidth}x${paperHeight} cm`, centerX, 10);
+    pdf.text(`Plano de Corte - ${material} ${gramatura}gm ${paperWidth}x${paperHeight} cm`, centerX, 10);
 
     // Adiciona o total de folhas e o total após corte
     pdf.setFontSize(10);
     pdf.text(`Total de Folhas: ${paperQuantity}`, centerX, 15);
     pdf.text(`Total Após Corte: ${totalCuts * paperQuantity}`, centerX, 20);
+    pdf.text(`Total em Produtos: ${totalCuts * paperQuantity * multiplo}`, centerX, 25);
 
     // Desenha os cortes
     pdf.setDrawColor(0, 0, 0); // Preto para as linhas de corte
@@ -117,79 +127,56 @@ const App = () => {
       pdf.text(`Sobra: ${leftoverHeight} cm`, textX, textY);
     }
 
-    pdf.save('Plano-de-Corte.pdf');
+    pdf.save(`Plano de Corte - ${material} ${gramatura}gm - ${paperWidth}x${paperHeight} cm.pdf`);
   };
 
   return (
     <div style={{ padding: '20px', display: 'flex', height: '100vh' }}>
-      {/* Coluna da esquerda com o Card */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <Card
-          style={{
-            width: '100%',
-            maxWidth: '600px',
-            borderRadius: '15px',
-            background: 'rgba(255, 255, 255, 0.8)',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-            padding: '20px',
-            marginBottom: '20px' // Espaço entre o Card e o Canvas
-          }}
-        >
-          <h1 style={{ textAlign: 'center' }}>Plano de Corte</h1>
+        <Card style={{ width: '100%', maxWidth: '600px', padding: '20px', marginBottom: '20px' }}>
+          <h1 style={{ textAlign: 'center' }}>Plano de Corte - Guilhotina</h1>
           <Row gutter={16}>
             <Col xs={24} sm={12}>
-              <Input
-                type="number"
-                value={paperWidth}
-                onChange={(e) => setPaperWidth(Number(e.target.value))}
-                addonBefore="Papel - Largura:"
-                style={{ marginBottom: '10px' }}
-              />
+              <Input type="number" value={paperWidth} onChange={(e) => setPaperWidth(Number(e.target.value))} addonBefore="Papel - Largura:" style={{ marginBottom: '10px' }} />
             </Col>
             <Col xs={24} sm={12}>
-              <Input
-                type="number"
-                value={paperHeight}
-                onChange={(e) => setPaperHeight(Number(e.target.value))}
-                addonBefore="Papel - Altura:"
-                style={{ marginBottom: '10px' }}
-              />
+              <Input type="number" value={paperHeight} onChange={(e) => setPaperHeight(Number(e.target.value))} addonBefore="Papel - Altura:" style={{ marginBottom: '10px' }} />
             </Col>
           </Row>
           <Row gutter={16}>
             <Col xs={24} sm={12}>
-              <Input
-                type="number"
-                value={cutWidth}
-                onChange={(e) => setCutWidth(Number(e.target.value))}
-                addonBefore="Corte - Largura:"
-                style={{ marginBottom: '10px' }}
-              />
+              <Input type="number" value={cutWidth} onChange={(e) => setCutWidth(Number(e.target.value))} addonBefore="Corte - Largura:" style={{ marginBottom: '10px' }} />
             </Col>
             <Col xs={24} sm={12}>
-              <Input
-                type="number"
-                value={cutHeight}
-                onChange={(e) => setCutHeight(Number(e.target.value))}
-                addonBefore="Corte - Altura:"
-                style={{ marginBottom: '10px' }}
-              />
+              <Input type="number" value={cutHeight} onChange={(e) => setCutHeight(Number(e.target.value))} addonBefore="Corte - Altura:" style={{ marginBottom: '10px' }} />
             </Col>
           </Row>
           <Row gutter={16}>
             <Col xs={24} sm={12}>
-              <Input
-                type="number"
-                value={paperQuantity}
-                onChange={(e) => setPaperQuantity(Number(e.target.value))}
-                addonBefore="Qtd. de Folhas:"
-                style={{ marginBottom: '10px' }}
-              />
+              <Input type="number" value={paperQuantity} onChange={(e) => setPaperQuantity(Number(e.target.value))} addonBefore="Qtd. de Folhas:" style={{ marginBottom: '10px' }} />
+            </Col>
+            <Col xs={24} sm={12}>
+              <Input type="number" value={multiplo} onChange={(e) => setMultiplo(Number(e.target.value))} addonBefore="Múltiplo:" style={{ marginBottom: '10px' }} />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col xs={24} sm={12}>
+              <Select value={material} onChange={setMaterial} placeholder="Escolha o Papel" style={{ width: '100%' }}>
+                <Option value="Triplex">Klabin</Option>
+                <Option value="Duplex">Duplex</Option>
+                <Option value="Klabin">Triplex</Option>
+                <Option value="Couche">Couche</Option>
+                <Option value="Kraft">Kraft</Option>
+                <Option value="Onda B">Onda B</Option>
+                <Option value="Onda E">Onda E</Option>
+              </Select>
+            </Col>
+            <Col xs={24} sm={12}>
+              <Input type="number" value={gramatura} onChange={(e) => setGramatura(Number(e.target.value))} addonBefore="Gramatura (gm):" style={{ marginBottom: '10px' }} />
             </Col>
           </Row>
           <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
-            <Button type="primary" onClick={drawPlan} style={{ marginRight: '10px' }}>
+            <Button type="primary" onClick={() => { updateTotals(); drawPlan(); }} style={{ marginRight: '10px' }}>
               Gerar Plano de Corte
             </Button>
             <Button type="default" onClick={generatePDF}>
@@ -197,21 +184,16 @@ const App = () => {
             </Button>
           </div>
         </Card>
+
+        <Card style={{ width: '100%', maxWidth: '600px', marginTop: '20px' }}>
+          <h3>Totais</h3>
+          <p>Total Após Corte: {totals.totalCuts * paperQuantity}</p>
+          <p>Total em Produtos: {totals.totalProducts}</p>
+        </Card>
       </div>
 
-      {/* Coluna da direita com o Canvas */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <canvas
-          id="planCanvas"
-          width={paperWidth * 10}
-          height={paperHeight * 10}
-          style={{ 
-            
-            display: 'block', 
-            transform: `scale(${scale})`, // Aplica a escala aqui
-            transformOrigin: 'center' // Origem da transformação
-          }} 
-        ></canvas>
+        <canvas id="planCanvas" width={paperWidth * 10} height={paperHeight * 10} style={{ transform: `scale(0.7)`, transformOrigin: 'center' }}></canvas>
       </div>
     </div>
   );
