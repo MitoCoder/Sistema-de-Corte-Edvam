@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Button, Input, Row, Col, Select } from "antd";
+import { Card, Button, Input, Row, Col, Select, message } from "antd";
 import "antd/dist/reset.css"; // Importa o CSS do Ant Design
 import "./App.css"; // Importa o CSS Personalizado
 import { jsPDF } from "jspdf";
@@ -34,6 +34,7 @@ const App = () => {
       totalCuts: rows * cols,
     };
   };
+
 
   const updateTotals = () => {
     const { totalCuts } = calculateCuts();
@@ -175,6 +176,12 @@ const App = () => {
     );
   };
 
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const info = () => {
+    messageApi.info('Plano Gerado, Exporte o PDF!');
+  };
+
   return (
     <div
       style={{
@@ -299,11 +306,13 @@ const App = () => {
               width: "100%",
             }}
           >
+          {contextHolder}
             <Button
               type="primary"
               onClick={() => {
                 updateTotals();
                 drawPlan();
+                info(); 
               }}
               style={{
                 marginRight: window.innerWidth < 768 ? "0" : "10px",
