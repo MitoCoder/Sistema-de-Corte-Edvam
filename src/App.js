@@ -298,10 +298,11 @@ const App = () => {
                 placeholder="Escolha o Papel"
                 style={{ width: "100%", marginBottom: "15px" }} // Aumentar a margem inferior
               >
-                <Option value="Triplex">Klabin</Option>
+                <Option value="Triplex">Triplex</Option>
                 <Option value="Duplex">Duplex</Option>
-                <Option value="Klabin">Triplex</Option>
+                <Option value="Klabin">Klabin</Option>
                 <Option value="Couche">Couche</Option>
+                <Option value="Couche Adesivo">Couche Adesivo</Option>
                 <Option value="Kraft">Kraft</Option>
                 <Option value="Onda B">Onda B</Option>
                 <Option value="Onda E">Onda E</Option>
