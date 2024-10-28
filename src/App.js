@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Adicionando useEffect
 import { Card, Button, Input, Row, Col, Select, message } from "antd";
 import "antd/dist/reset.css"; // Importa o CSS do Ant Design
 import "./App.css"; // Importa o CSS Personalizado
 import { jsPDF } from "jspdf";
+import Particles, { initParticlesEngine } from "@tsparticles/react"; // Importando Particles
+import { loadSeaAnemonePreset } from "@tsparticles/preset-sea-anemone"; // Importe o preset
+import { loadSlim } from "@tsparticles/slim";
 
 const { Option } = Select;
 
@@ -16,6 +19,21 @@ const App = () => {
   const [material, setMaterial] = useState("Papel");
   const [gramatura, setGramatura] = useState(0);
   const [totals, setTotals] = useState({ totalCuts: 0, totalProducts: 0 });
+
+  const [particlesInit, setParticlesInit] = useState(false);
+
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+      await loadSlim(engine); // Carrega a versão leve do motor de partículas
+      await loadSeaAnemonePreset(engine); // Carrega o preset seaAnemone
+    }).then(() => {
+      setParticlesInit(true);
+    });
+  }, []);
+
+  const particlesOptions = {
+    preset: "seaAnemone", // Defina o preset como seaAnemone
+  };
 
   const calculateCuts = () => {
     const rows = Math.floor(paperHeight / cutHeight);
@@ -35,7 +53,6 @@ const App = () => {
     };
   };
 
-
   const updateTotals = () => {
     const { totalCuts } = calculateCuts();
     const totalProducts = totalCuts * paperQuantity * multiplo;
@@ -54,11 +71,12 @@ const App = () => {
 
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < cols; j++) {
-        ctx.strokeStyle = "black"; // Linhas normais
+        ctx.strokeStyle = "white"; // Linhas normais
         ctx.lineWidth = 1; // Linha padrão
         ctx.strokeRect(j * cutW, i * cutH, cutW, cutH);
 
         ctx.font = "12px Arial";
+        ctx.fillStyle = "white"; // Define a cor da fonte para white
         const text = `${cutWidth}x${cutHeight}`;
         const textWidth = ctx.measureText(text).width;
         const textX = j * cutW + (cutW - textWidth) / 2;
@@ -69,13 +87,14 @@ const App = () => {
     }
 
     ctx.font = "14px Arial";
+    ctx.fillStyle = "white"; // Define a cor da fonte para white
     ctx.fillText(
-      `Formato:${paperWidth}x${paperHeight}`,
+      `Formato: ${paperWidth}x${paperHeight}`,
       10,
       paperHeight * 10 - 10
     );
 
-    ctx.strokeStyle = "darkred"; // Cor vermelha escura para as linhas da sobra
+    ctx.strokeStyle = "white"; // Cor vermelha escura para as linhas da sobra
     ctx.lineWidth = 2; // Linha mais grossa para a sobra
 
     if (leftoverWidth > 0) {
@@ -87,7 +106,7 @@ const App = () => {
       ctx.fillText(`Sobra: ${leftoverHeight} cm`, 10, rows * cutH + 20);
     }
 
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "White";
     ctx.lineWidth = 1; // Linha padrão para os outros detalhes
 
     ctx.font = "08px Arial";
@@ -179,7 +198,7 @@ const App = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const info = () => {
-    messageApi.info('Plano Gerado, Exporte o PDF!');
+    messageApi.info("Plano Gerado, Exporte o PDF!");
   };
 
   return (
@@ -207,6 +226,7 @@ const App = () => {
             maxWidth: "600px",
             padding: "20px",
             marginBottom: "20px",
+            zIndex: 1,
           }}
         >
           <h1 style={{ textAlign: "center" }}>Plano de Corte - Guilhotina</h1>
@@ -306,13 +326,13 @@ const App = () => {
               width: "100%",
             }}
           >
-          {contextHolder}
+            {contextHolder}
             <Button
               type="primary"
               onClick={() => {
                 updateTotals();
                 drawPlan();
-                info(); 
+                info();
               }}
               style={{
                 marginRight: window.innerWidth < 768 ? "0" : "10px",
@@ -332,7 +352,14 @@ const App = () => {
           </div>
         </Card>
 
-        <Card style={{ width: "100%", maxWidth: "600px", marginTop: "20px" }}>
+        <Card
+          style={{
+            width: "100%",
+            maxWidth: "600px",
+            marginTop: "3px",
+            zIndex: 1,
+          }}
+        >
           <h3>Totais</h3>
           <p>Total Após Corte: {totals.totalCuts * paperQuantity}</p>
           <p>Total em Produtos: {totals.totalProducts}</p>
@@ -346,13 +373,34 @@ const App = () => {
           alignItems: "center",
           justifyContent: "center",
           width: "100%",
+          position: "relative", // Para o container ter um contexto de posição
         }}
       >
+        {particlesInit && (
+          <Particles
+            id="tsparticles"
+            options={particlesOptions} // Passa as opções configuradas
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: -1,
+            }}
+          />
+        )}
+
         <canvas
           id="planCanvas"
           width={paperWidth * 10}
           height={paperHeight * 10}
-          style={{ transform: `scale(0.7)`, transformOrigin: "center" }}
+          style={{
+            transform: `scale(0.7)`,
+            transformOrigin: "center",
+            zIndex: 0,
+            position: "relative",
+          }} // Adicionado zIndex para o canvas
         ></canvas>
       </div>
     </div>
