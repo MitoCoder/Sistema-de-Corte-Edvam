@@ -203,6 +203,7 @@ const App = () => {
 
   return (
     <div
+    className="zoomed" // Nova classe para aplicar o zoom apenas no conteúdo
       style={{
         padding: "20px",
         display: "flex",

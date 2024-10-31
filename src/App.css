@@ -68,5 +68,10 @@ h1 {
     padding: 20px;
   }
 }
-
+/* App.css */
+@media (min-width: 768px) {
+  .zoomed {
+    zoom: 0.85; /* Apenas zoom, sem centralização */
+  }
+}
 
