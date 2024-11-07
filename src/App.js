@@ -286,7 +286,7 @@ const App = () => {
                 type="number"
                 value={multiplo}
                 onChange={(e) => setMultiplo(Number(e.target.value))}
-                addonBefore="Múltiplo:"
+                addonBefore="Montagem:"
                 style={{ marginBottom: "15px" }} // Aumentar a margem inferior
               />
             </Col>
