@@ -59,6 +59,9 @@ const App = () => {
     setTotals({ totalCuts, totalProducts });
   };
 
+  const scaleFactor = 0.9; // Valor fixo inicial para teste
+
+
   const drawPlan = () => {
     const canvas = document.getElementById("planCanvas");
     const ctx = canvas.getContext("2d");
@@ -393,18 +396,32 @@ const App = () => {
           />
         )}
 
-        <canvas
-          id="planCanvas"
-          width={paperWidth * 10}
-          height={paperHeight * 10}
-          style={{
-            transform: `scale(0.7)`,
-            transformOrigin: "center",
-            zIndex: 0,
-            position: "relative",
+<div
+  style={{
+    width: "100%",
+    height: "100%",
+    overflow: "auto", // Permite rolagem se o canvas for maior que o espaço disponível
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  }}
+>
+  <canvas
+    id="planCanvas"
+    width={paperWidth * 10}
+    height={paperHeight * 10}
+    style={{
+      transform: `scale(${scaleFactor})`,
+      transformOrigin: "center",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              display: "block",
+              margin: "auto",
+              zIndex: 0,
           }} // Adicionado zIndex para o canvas
         ></canvas>
       </div>
+    </div>
     </div>
   );
 };
