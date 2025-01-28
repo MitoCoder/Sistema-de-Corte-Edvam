@@ -201,7 +201,85 @@ const App = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const info = () => {
-    messageApi.info("Plano Gerado, Exporte o PDF!");
+    messageApi.info("Plano Gerado, Exporte o PDF ou Visualize!");
+  };
+
+  const viewPDF = () => {
+    const { rows, cols, leftoverWidth, leftoverHeight, totalCuts } = calculateCuts();
+    const pdf = new jsPDF();
+  
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const cutW = 160 / paperWidth; // Fator de escala para o PDF
+    const cutH = 200 / paperHeight; // Fator de escala para o PDF
+    const centerX = (pageWidth - cutW * paperWidth) / 2; // Centralizar cortes no PDF
+  
+    // Adiciona o título do PDF
+    pdf.setFontSize(13);
+    pdf.text(
+      `Plano de Corte - ${material} ${gramatura}gm ${paperWidth}x${paperHeight} cm`,
+      centerX,
+      10
+    );
+  
+    // Adiciona o total de folhas e o total após corte
+    pdf.setFontSize(10);
+    pdf.text(`Total de Folhas: ${paperQuantity}`, centerX, 15);
+    pdf.text(`Total Após Corte: ${totalCuts * paperQuantity}`, centerX, 20);
+    pdf.text(
+      `Total em Produtos: ${totalCuts * paperQuantity * multiplo}`,
+      centerX,
+      25
+    );
+  
+    // Desenha os cortes
+    pdf.setDrawColor(0, 0, 0); // Preto para as linhas de corte
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        pdf.rect(
+          centerX + j * cutW * cutWidth,
+          30 + i * cutH * cutHeight,
+          cutW * cutWidth,
+          cutH * cutHeight
+        );
+        pdf.text(
+          `${cutWidth}x${cutHeight}`,
+          centerX + 2 + j * cutW * cutWidth,
+          45 + i * cutH * cutHeight
+        );
+      }
+    }
+  
+    // Desenha as sobras
+    pdf.setDrawColor(139, 0, 0); // Vermelho escuro para a linha da sobra
+    pdf.setFont("helvetica", "bold"); // Fonte em negrito para o texto
+  
+    if (leftoverWidth > 0) {
+      pdf.rect(
+        centerX + cols * cutW * cutWidth,
+        30,
+        cutW * leftoverWidth,
+        cutH * paperHeight
+      );
+      const textX = centerX + cols * cutW * cutWidth + cutW * leftoverWidth + 5;
+      const textY = 23 + (cutH * paperHeight) / 2;
+      pdf.text(`Sobra: ${leftoverWidth} cm`, textX, textY, { angle: 90 });
+    }
+    if (leftoverHeight > 0) {
+      pdf.rect(
+        centerX,
+        30 + rows * cutH * cutHeight,
+        cutW * paperWidth,
+        cutH * leftoverHeight
+      );
+      const textX = centerX + 2;
+      const textY = 40 + rows * cutH * cutHeight + cutH * leftoverHeight - 5;
+      pdf.text(`Sobra: ${leftoverHeight} cm`, textX, textY);
+    }
+  
+    // Gera o Blob e abre em uma nova aba
+    const pdfBlob = pdf.output("blob");
+    const pdfURL = URL.createObjectURL(pdfBlob);
+    window.open(pdfURL, "_blank");
   };
 
   return (
@@ -323,38 +401,53 @@ const App = () => {
             </Col>
           </Row>
           <div
-            style={{
-              marginTop: "20px",
-              display: "flex",
-              flexDirection: window.innerWidth < 768 ? "column" : "row",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
-            {contextHolder}
-            <Button
-              type="primary"
-              onClick={() => {
-                updateTotals();
-                drawPlan();
-                info();
-              }}
-              style={{
-                marginRight: window.innerWidth < 768 ? "0" : "10px",
-                marginBottom: window.innerWidth < 768 ? "10px" : "0",
-                width: window.innerWidth < 768 ? "100%" : "auto",
-              }}
-            >
-              Gerar Plano de Corte
-            </Button>
-            <Button
-              type="default"
-              onClick={generatePDF}
-              style={{ width: window.innerWidth < 768 ? "100%" : "auto" }}
-            >
-              Exportar como PDF
-            </Button>
-          </div>
+  style={{
+    marginTop: "20px",
+    display: "flex",
+    flexDirection: window.innerWidth < 768 ? "column" : "row",
+    justifyContent: "center",
+    width: "100%",
+  }}
+>
+  {contextHolder}
+  <Button
+    type="primary"
+    onClick={() => {
+      updateTotals();
+      drawPlan();
+      info();
+    }}
+    style={{
+      marginRight: window.innerWidth < 768 ? "0" : "10px",
+      marginBottom: window.innerWidth < 768 ? "10px" : "0",
+      width: window.innerWidth < 768 ? "100%" : "auto",
+    }}
+  >
+    Gerar Plano de Corte
+  </Button>
+  <Button
+    type="default"
+    onClick={generatePDF}
+    style={{
+      marginRight: window.innerWidth < 768 ? "0" : "10px",
+      marginBottom: window.innerWidth < 768 ? "10px" : "0",
+      width: window.innerWidth < 768 ? "100%" : "auto",
+    }}
+  >
+    Exportar como PDF
+  </Button>
+  <Button
+    type="default"
+    onClick={viewPDF}
+    style={{
+      width: window.innerWidth < 768 ? "100%" : "auto",
+      marginBottom: window.innerWidth < 768 ? "10px" : "0", // Adicionando margem inferior para mobile
+    }}
+  >
+    Visualizar PDF
+  </Button>
+</div>
+
         </Card>
 
         <Card
