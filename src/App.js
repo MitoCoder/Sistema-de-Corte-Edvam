@@ -439,7 +439,7 @@ const App = () => {
               }}
               style={{
                 backgroundColor: "rgba(211, 211, 211, 0.46)", // Cinza claro
-                color: "black",
+                color: "white",
                 marginRight: window.innerWidth < 768 ? "0" : "10px",
                 marginBottom: window.innerWidth < 768 ? "10px" : "0",
                 width: window.innerWidth < 768 ? "100%" : "auto",
