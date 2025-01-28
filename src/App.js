@@ -4,8 +4,9 @@ import "antd/dist/reset.css"; // Importa o CSS do Ant Design
 import "./App.css"; // Importa o CSS Personalizado
 import { jsPDF } from "jspdf";
 import Particles, { initParticlesEngine } from "@tsparticles/react"; // Importando Particles
-import { loadSeaAnemonePreset } from "@tsparticles/preset-sea-anemone"; // Importe o preset
+import { loadSquaresPreset } from "@tsparticles/preset-squares";
 import { loadSlim } from "@tsparticles/slim";
+import { loadEasingQuadPlugin } from "@tsparticles/plugin-easing-quad";
 
 const { Option } = Select;
 
@@ -25,14 +26,15 @@ const App = () => {
   useEffect(() => {
     initParticlesEngine(async (engine) => {
       await loadSlim(engine); // Carrega a versão leve do motor de partículas
-      await loadSeaAnemonePreset(engine); // Carrega o preset seaAnemone
+      await loadSquaresPreset(engine); // Carrega o preset squares
+      loadEasingQuadPlugin(engine);
     }).then(() => {
       setParticlesInit(true);
     });
   }, []);
 
   const particlesOptions = {
-    preset: "seaAnemone", // Defina o preset como seaAnemone
+    preset: "squares", // Defina o preset como squares
   };
 
   const calculateCuts = () => {
@@ -60,7 +62,6 @@ const App = () => {
   };
 
   const scaleFactor = 0.9; // Valor fixo inicial para teste
-
 
   const drawPlan = () => {
     const canvas = document.getElementById("planCanvas");
@@ -205,14 +206,15 @@ const App = () => {
   };
 
   const viewPDF = () => {
-    const { rows, cols, leftoverWidth, leftoverHeight, totalCuts } = calculateCuts();
+    const { rows, cols, leftoverWidth, leftoverHeight, totalCuts } =
+      calculateCuts();
     const pdf = new jsPDF();
-  
+
     const pageWidth = pdf.internal.pageSize.getWidth();
     const cutW = 160 / paperWidth; // Fator de escala para o PDF
     const cutH = 200 / paperHeight; // Fator de escala para o PDF
     const centerX = (pageWidth - cutW * paperWidth) / 2; // Centralizar cortes no PDF
-  
+
     // Adiciona o título do PDF
     pdf.setFontSize(13);
     pdf.text(
@@ -220,7 +222,7 @@ const App = () => {
       centerX,
       10
     );
-  
+
     // Adiciona o total de folhas e o total após corte
     pdf.setFontSize(10);
     pdf.text(`Total de Folhas: ${paperQuantity}`, centerX, 15);
@@ -230,7 +232,7 @@ const App = () => {
       centerX,
       25
     );
-  
+
     // Desenha os cortes
     pdf.setDrawColor(0, 0, 0); // Preto para as linhas de corte
     for (let i = 0; i < rows; i++) {
@@ -248,11 +250,11 @@ const App = () => {
         );
       }
     }
-  
+
     // Desenha as sobras
     pdf.setDrawColor(139, 0, 0); // Vermelho escuro para a linha da sobra
     pdf.setFont("helvetica", "bold"); // Fonte em negrito para o texto
-  
+
     if (leftoverWidth > 0) {
       pdf.rect(
         centerX + cols * cutW * cutWidth,
@@ -275,7 +277,7 @@ const App = () => {
       const textY = 40 + rows * cutH * cutHeight + cutH * leftoverHeight - 5;
       pdf.text(`Sobra: ${leftoverHeight} cm`, textX, textY);
     }
-  
+
     // Gera o Blob e abre em uma nova aba
     const pdfBlob = pdf.output("blob");
     const pdfURL = URL.createObjectURL(pdfBlob);
@@ -284,7 +286,7 @@ const App = () => {
 
   return (
     <div
-    className="zoomed" // Nova classe para aplicar o zoom apenas no conteúdo
+      className="zoomed" // Nova classe para aplicar o zoom apenas no conteúdo
       style={{
         padding: "20px",
         display: "flex",
@@ -303,22 +305,30 @@ const App = () => {
         }}
       >
         <Card
+          className="card-transparent" /* Adicione a classe personalizada aqui */
           style={{
             width: "100%",
             maxWidth: "600px",
-            padding: "20px",
             marginBottom: "20px",
             zIndex: 1,
           }}
         >
-          <h1 style={{ textAlign: "center" }}>Plano de Corte - Guilhotina</h1>
+          <h1 style={{ textAlign: "center", color: "white" }}>
+            Plano de Corte - Guilhotina
+          </h1>
+          <p style={{ textAlign: "center", color: "white" }}>
+            Ed's Sistemas - Versão: 4.5.0
+          </p>
+
           <Row gutter={16}>
             <Col xs={24} sm={12}>
               <Input
                 type="number"
                 value={paperWidth}
                 onChange={(e) => setPaperWidth(Number(e.target.value))}
-                addonBefore="Papel - Largura:"
+                addonBefore={
+                  <span className="white-label">Papel - Largura:</span>
+                }
                 style={{ marginBottom: "15px" }} // Aumentar a margem inferior
               />
             </Col>
@@ -327,7 +337,9 @@ const App = () => {
                 type="number"
                 value={paperHeight}
                 onChange={(e) => setPaperHeight(Number(e.target.value))}
-                addonBefore="Papel - Altura:"
+                addonBefore={
+                  <span className="white-label">Papel - Altura:</span>
+                }
                 style={{ marginBottom: "15px" }} // Aumentar a margem inferior
               />
             </Col>
@@ -338,7 +350,9 @@ const App = () => {
                 type="number"
                 value={cutWidth}
                 onChange={(e) => setCutWidth(Number(e.target.value))}
-                addonBefore="Corte - Largura:"
+                addonBefore={
+                  <span className="white-label">Corte - Largura:</span>
+                }
                 style={{ marginBottom: "15px" }} // Aumentar a margem inferior
               />
             </Col>
@@ -347,7 +361,9 @@ const App = () => {
                 type="number"
                 value={cutHeight}
                 onChange={(e) => setCutHeight(Number(e.target.value))}
-                addonBefore="Corte - Altura:"
+                addonBefore={
+                  <span className="white-label">Corte - Altura:</span>
+                }
                 style={{ marginBottom: "15px" }} // Aumentar a margem inferior
               />
             </Col>
@@ -358,7 +374,9 @@ const App = () => {
                 type="number"
                 value={paperQuantity}
                 onChange={(e) => setPaperQuantity(Number(e.target.value))}
-                addonBefore="Qtd. de Folhas:"
+                addonBefore={
+                  <span className="white-label">Qtd. de Folhas:</span>
+                }
                 style={{ marginBottom: "15px" }} // Aumentar a margem inferior
               />
             </Col>
@@ -367,7 +385,7 @@ const App = () => {
                 type="number"
                 value={multiplo}
                 onChange={(e) => setMultiplo(Number(e.target.value))}
-                addonBefore="Montagem:"
+                addonBefore={<span className="white-label">Montagem:</span>}
                 style={{ marginBottom: "15px" }} // Aumentar a margem inferior
               />
             </Col>
@@ -395,62 +413,66 @@ const App = () => {
                 type="number"
                 value={gramatura}
                 onChange={(e) => setGramatura(Number(e.target.value))}
-                addonBefore="Gramatura (gm):"
+                addonBefore={
+                  <span className="white-label">Gramatura (gm):</span>
+                }
                 style={{ marginBottom: "15px" }} // Aumentar a margem inferior
               />
             </Col>
           </Row>
           <div
-  style={{
-    marginTop: "20px",
-    display: "flex",
-    flexDirection: window.innerWidth < 768 ? "column" : "row",
-    justifyContent: "center",
-    width: "100%",
-  }}
->
-  {contextHolder}
-  <Button
-    type="primary"
-    onClick={() => {
-      updateTotals();
-      drawPlan();
-      info();
-    }}
-    style={{
-      marginRight: window.innerWidth < 768 ? "0" : "10px",
-      marginBottom: window.innerWidth < 768 ? "10px" : "0",
-      width: window.innerWidth < 768 ? "100%" : "auto",
-    }}
-  >
-    Gerar Plano de Corte
-  </Button>
-  <Button
-    type="default"
-    onClick={generatePDF}
-    style={{
-      marginRight: window.innerWidth < 768 ? "0" : "10px",
-      marginBottom: window.innerWidth < 768 ? "10px" : "0",
-      width: window.innerWidth < 768 ? "100%" : "auto",
-    }}
-  >
-    Exportar como PDF
-  </Button>
-  <Button
-    type="default"
-    onClick={viewPDF}
-    style={{
-      width: window.innerWidth < 768 ? "100%" : "auto",
-      marginBottom: window.innerWidth < 768 ? "10px" : "0", // Adicionando margem inferior para mobile
-    }}
-  >
-    Visualizar PDF
-  </Button>
-</div>
-
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              flexDirection: window.innerWidth < 768 ? "column" : "row",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            {contextHolder}
+            <Button
+              type="primary"
+              onClick={() => {
+                updateTotals();
+                drawPlan();
+                info();
+              }}
+              style={{
+                backgroundColor: "rgba(211, 211, 211, 0.46)", // Cinza claro
+                color: "black",
+                marginRight: window.innerWidth < 768 ? "0" : "10px",
+                marginBottom: window.innerWidth < 768 ? "10px" : "0",
+                width: window.innerWidth < 768 ? "100%" : "auto",
+              }}
+            >
+              Gerar Plano de Corte
+            </Button>
+            <Button
+              type="default"
+              onClick={generatePDF}
+              style={{
+                marginRight: window.innerWidth < 768 ? "0" : "10px",
+                marginBottom: window.innerWidth < 768 ? "10px" : "0",
+                width: window.innerWidth < 768 ? "100%" : "auto",
+              }}
+            >
+              Exportar como PDF
+            </Button>
+            <Button
+              type="default"
+              onClick={viewPDF}
+              style={{
+                width: window.innerWidth < 768 ? "100%" : "auto",
+                marginBottom: window.innerWidth < 768 ? "10px" : "0", // Adicionando margem inferior para mobile
+              }}
+            >
+              Visualizar PDF
+            </Button>
+          </div>
         </Card>
 
         <Card
+          className="card-transparent" /* Adicione a classe personalizada aqui */
           style={{
             width: "100%",
             maxWidth: "600px",
@@ -458,9 +480,16 @@ const App = () => {
             zIndex: 1,
           }}
         >
-          <h3>Totais</h3>
-          <p>Total Após Corte: {totals.totalCuts * paperQuantity}</p>
-          <p>Total em Produtos: {totals.totalProducts}</p>
+          <h3 style={{ color: "white" }}>Totais Separados:</h3>
+          <p style={{ color: "white" }}>
+            Total Após Corte: {totals.totalCuts * paperQuantity}
+          </p>
+          <p style={{ color: "white" }}>
+            Total em Produtos: {totals.totalProducts}
+          </p>
+          <p style={{ color: "white" }}>
+            ©2025 Copyright. Todos os direitos reservados à Edvam Santos.
+          </p>
         </Card>
       </div>
 
@@ -489,32 +518,32 @@ const App = () => {
           />
         )}
 
-<div
-  style={{
-    width: "100%",
-    height: "100%",
-    overflow: "auto", // Permite rolagem se o canvas for maior que o espaço disponível
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  }}
->
-  <canvas
-    id="planCanvas"
-    width={paperWidth * 10}
-    height={paperHeight * 10}
-    style={{
-      transform: `scale(${scaleFactor})`,
-      transformOrigin: "center",
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            overflow: "auto", // Permite rolagem se o canvas for maior que o espaço disponível
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <canvas
+            id="planCanvas"
+            width={paperWidth * 10}
+            height={paperHeight * 10}
+            style={{
+              transform: `scale(${scaleFactor})`,
+              transformOrigin: "center",
               maxWidth: "100%",
               maxHeight: "100%",
               display: "block",
               margin: "auto",
               zIndex: 0,
-          }} // Adicionado zIndex para o canvas
-        ></canvas>
+            }} // Adicionado zIndex para o canvas
+          ></canvas>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

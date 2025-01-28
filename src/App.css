@@ -50,9 +50,24 @@ h1 {
   width: 100%;
 }
 
+/* Adicione essas novas regras para um fundo transparente com desfoque */
+.card-transparent {
+  background: rgba(255, 255, 255, 0.2); /* Fundo semitransparente */
+  backdrop-filter: blur(10px); /* Efeito de desfoque */
+  border-radius: 10px; /* Bordas arredondadas para um efeito suave */
+  padding: 20px; /* Padding para o conteúdo */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave para o card */
+}
+
+.white-label {
+  color: white;
+}
+
+/* Manter as outras regras já existentes */
 .ant-btn {
   margin-top: 10px;
 }
+
 @media (max-width: 768px) {
   #planCanvas {
     display: none;
@@ -74,4 +89,3 @@ h1 {
     zoom: 0.85; /* Apenas zoom, sem centralização */
   }
 }
-
