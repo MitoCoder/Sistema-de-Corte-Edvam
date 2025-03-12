@@ -308,6 +308,7 @@ const App = () => {
           className="card-transparent" /* Adicione a classe personalizada aqui */
           style={{
             width: "100%",
+            marginTop: "40px", // Move o Card para baixo
             maxWidth: "600px",
             marginBottom: "20px",
             zIndex: 1,
