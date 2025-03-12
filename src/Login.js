@@ -10,6 +10,7 @@ const Login = ({ onLoginSuccess }) => {
 
   // Definindo usuários e senhas
   const users = {
+    Mestre: 'Ed2025',
     Abner: 'Ab2025',
     Geovanna: 'Ge2025',
     Jakeline: 'Ja2025',
