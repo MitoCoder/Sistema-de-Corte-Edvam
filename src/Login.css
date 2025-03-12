@@ -4,32 +4,44 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #000000, #4f4f4f, #ffffff);
+  background: url('/Login.jpg') no-repeat center center/cover;
   padding: 20px;
 }
 
 .login-card {
+  background: rgba(255, 255, 255, 0.2); /* Fundo semitransparente */
+  backdrop-filter: blur(10px); /* Efeito de desfoque */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
 }
 
 .login-title {
   text-align: center;
   font-weight: bold;
-  color: #000;
+  color: white;
   margin-bottom: 20px;
-  font-size: 20px;
+  font-size: 22px;
 }
 
-.login-form .ant-input-affix-wrapper {
+.white-label {
+  color: white;
+}
+
+.ant-input,
+.ant-select-selector,
+.ant-input-password {
   border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
 }
 
-@media (max-width: 767px) {
+.ant-btn {
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
   .login-card {
     width: 100%;
   }
