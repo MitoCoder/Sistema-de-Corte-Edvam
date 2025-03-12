@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Button, Input, Select, Form, message, Row, Col, Typography } from "antd";
+import { Card, Button, Input, Select, Form, message, Typography } from "antd";
 import { LockOutlined } from "@ant-design/icons";
 import "./Login.css";
 
@@ -27,46 +27,41 @@ const Login = ({ onLoginSuccess }) => {
 
   return (
     <div className="login-container">
-      <Row justify="center" align="middle" style={{ height: "100vh" }}>
-        <Col xs={24} sm={20} md={12} lg={8}>
-          <Card className="login-card">
-            <Title level={3} className="login-header">SISTEMA DE CORTE</Title>
-            <Form layout="vertical" onFinish={handleLogin}>
-              <Form.Item label="Usuário" required>
-                <Select
-                  placeholder="Selecione seu usuário"
-                  value={username}
-                  onChange={(value) => setUsername(value)}
-                  style={{ width: "100%" }}
-                >
-                  <Option value="Mestre">Abner</Option>
-                  <Option value="Abner">Abner</Option>
-                  <Option value="Geovanna">Geovanna</Option>
-                  <Option value="Jakeline">Jakeline</Option>
-                </Select>
-              </Form.Item>
+      <Card bordered={false} className="login-card">
+        <Title level={3} className="login-title">SISTEMA DE CORTE</Title>
 
-              <Form.Item label="Senha" required>
-                <Input.Password
-                  placeholder="Digite sua senha"
-                  prefix={<LockOutlined />}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  style={{ width: "100%" }}
-                />
-              </Form.Item>
+        <Form layout="vertical" onFinish={handleLogin} className="login-form">
+          <Form.Item label="Usuário" required>
+            <Select
+              placeholder="Selecione seu usuário"
+              value={username}
+              onChange={(value) => setUsername(value)}
+              style={{ width: "100%" }}
+            >
+              <Option value="Mestre">Mestre</Option>
+              <Option value="Abner">Abner</Option>
+              <Option value="Geovanna">Geovanna</Option>
+              <Option value="Jakeline">Jakeline</Option>
+            </Select>
+          </Form.Item>
 
-              <Button type="primary" htmlType="submit" block className="login-button">
-                Entrar
-              </Button>
-            </Form>
-          </Card>
-        </Col>
-      </Row>
+          <Form.Item label="Senha" required>
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="Digite sua senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{ width: "100%" }}
+            />
+          </Form.Item>
+
+          <Button type="primary" htmlType="submit" block>
+            Entrar
+          </Button>
+        </Form>
+      </Card>
     </div>
   );
 };
 
 export default Login;
-
-
