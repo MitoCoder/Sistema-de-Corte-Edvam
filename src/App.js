@@ -61,7 +61,7 @@ const App = () => {
     setTotals({ totalCuts, totalProducts });
   };
 
-  const scaleFactor = 0.7; // Valor fixo inicial para teste
+  const scaleFactor = 0.8; // Valor fixo inicial para teste
 
   const drawPlan = () => {
     const canvas = document.getElementById("planCanvas");
@@ -317,7 +317,7 @@ const App = () => {
             Plano de Corte - Guilhotina
           </h1>
           <p style={{ textAlign: "center", color: "white" }}>
-            Ed's Sistemas - Versão: 4.5.0
+            Ed's Sistemas - Versão: 5.2.1
           </p>
 
           <Row gutter={16}>
