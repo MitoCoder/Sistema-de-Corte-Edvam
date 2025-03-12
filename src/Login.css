@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url('/login.jpg'); /* Caminho correto para a pasta public */
+  background-image: url('login.jpg'); /* Caminho correto para a pasta public */
   background-size: cover;  /* Faz a imagem cobrir toda a tela */
   background-position: center; /* Centraliza a imagem */
   background-repeat: no-repeat; /* Evita repetição */
