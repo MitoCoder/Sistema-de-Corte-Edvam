@@ -61,7 +61,7 @@ const App = () => {
     setTotals({ totalCuts, totalProducts });
   };
 
-  const scaleFactor = 0.9; // Valor fixo inicial para teste
+  const scaleFactor = 0.7; // Valor fixo inicial para teste
 
   const drawPlan = () => {
     const canvas = document.getElementById("planCanvas");
