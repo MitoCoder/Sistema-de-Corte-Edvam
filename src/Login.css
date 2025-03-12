@@ -4,8 +4,10 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: url('/login.jpg') no-repeat center center/cover;
-  padding: 20px;
+  background-image: url('/login.jpg'); /* Caminho correto para a pasta public */
+  background-size: cover;  /* Faz a imagem cobrir toda a tela */
+  background-position: center; /* Centraliza a imagem */
+  background-repeat: no-repeat; /* Evita repetição */
 }
 
 .login-card {
