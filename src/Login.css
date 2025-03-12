@@ -4,27 +4,31 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f2f5;
+  background: linear-gradient(135deg, #667eea, #764ba2);
 }
 
-.ant-card {
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.login-card {
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
-@media (max-width: 767px) {
-  .login-container {
+.login-header {
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-button {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    width: 100%;
     padding: 20px;
   }
-
-  .ant-card {
-    width: 100%;
-  }
 }
-
-@media (min-width: 768px) {
-  .ant-card {
-    width: 400px;
-  }
-}
-
