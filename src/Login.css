@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f2f5;
+  background: linear-gradient(135deg, #000000, #4f4f4f, #ffffff);
   padding: 20px;
 }
 
@@ -14,23 +14,23 @@
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background: white;
-  text-align: center;
+  background-color: #fff;
 }
 
 .login-title {
-  font-weight: bold;
-  color: black;
   text-align: center;
+  font-weight: bold;
+  color: #000;
   margin-bottom: 20px;
+  font-size: 20px;
 }
 
-.login-form .ant-form-item {
-  margin-bottom: 15px;
+.login-form .ant-input-affix-wrapper {
+  border-radius: 8px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 767px) {
   .login-card {
-    padding: 15px;
+    width: 100%;
   }
 }
