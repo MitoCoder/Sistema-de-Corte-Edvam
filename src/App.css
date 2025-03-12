@@ -86,6 +86,6 @@ h1 {
 /* App.css */
 @media (min-width: 768px) {
   .zoomed {
-    zoom: 0.85; /* Apenas zoom, sem centralização */
+    zoom: 0.74; /* Apenas zoom, sem centralização */
   }
 }
