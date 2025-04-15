@@ -10,11 +10,16 @@ const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const users = {
-    Administrador: "Ed2026",
-    Abner: "Ab2025",
-    Geovanna: "Ge2025",
-  };
+  const rawData = "QWRtaW5pc3RyYWRvcjpFZDIwMjY7QWJuZXI6QWIyMDI1O0dlb3Zhbm5hOkdlMjAyNQ==";
+
+  // Constrói o dicionário de usuários de forma dinâmica
+  const users = {};
+  atob(rawData)
+    .split(";")
+    .forEach((entry) => {
+      const [user, pass] = entry.split(":");
+      users[user] = pass;
+    });
 
   const handleLogin = () => {
     if (users[username] && users[username] === password) {
