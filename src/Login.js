@@ -11,7 +11,7 @@ const Login = ({ onLoginSuccess }) => {
   const [password, setPassword] = useState("");
 
   const users = {
-    Administrador: "Ed2025",
+    Administrador: "Ed2026",
     Abner: "Ab2025",
     Geovanna: "Ge2025",
   };
