@@ -11,10 +11,9 @@ const Login = ({ onLoginSuccess }) => {
   const [password, setPassword] = useState("");
 
   const users = {
-    Mestre: "Ed2025",
+    Administrador: "Ed2025",
     Abner: "Ab2025",
     Geovanna: "Ge2025",
-    Jakeline: "Ja2025",
   };
 
   const handleLogin = () => {
@@ -38,10 +37,9 @@ const Login = ({ onLoginSuccess }) => {
               onChange={(value) => setUsername(value)}
               style={{ width: "100%" }}
             >
-              <Option value="Mestre">Mestre</Option>
+              <Option value="Administrador">Mestre</Option>
               <Option value="Abner">Abner</Option>
               <Option value="Geovanna">Geovanna</Option>
-              <Option value="Jakeline">Jakeline</Option>
             </Select>
           </Form.Item>
 
