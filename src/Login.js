@@ -42,7 +42,7 @@ const Login = ({ onLoginSuccess }) => {
               onChange={(value) => setUsername(value)}
               style={{ width: "100%" }}
             >
-              <Option value="Administrador">Mestre</Option>
+              <Option value="Administrador">Administrador</Option>
               <Option value="Abner">Abner</Option>
               <Option value="Geovanna">Geovanna</Option>
             </Select>
